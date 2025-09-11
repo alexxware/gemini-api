@@ -11,18 +11,23 @@ namespace GeminiBack.Service;
 public class GeminiService: IGeminiService
 {
     private IGeminiRepository _repository;
+    private IPromptStreamRepository _promptStreamRepository;
 
-    public GeminiService(IGeminiRepository repository)
+    public GeminiService(IGeminiRepository repository, IPromptStreamRepository promptStreamRepository)
     {
         _repository = repository;
+        _promptStreamRepository = promptStreamRepository;
     }
     public async Task<string> BasicPrompt(BasicPromptDto promptDto)
     {
         return await _repository.BasicPrompt(promptDto);
     }
 
-    public async Task<string> BasicPromptStream(BasicPromptDto promptDto)
+    public async IAsyncEnumerable<string> BasicPromptStream(BasicPromptDto promptDto)
     {
-        return "Hola mundo desde el service de stream";
+        await foreach (var response in _promptStreamRepository.BasicPromptStream(promptDto))
+        {
+            yield return response;
+        }
     }
 }

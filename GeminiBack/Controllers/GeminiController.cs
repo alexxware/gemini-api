@@ -4,6 +4,7 @@ using GeminiBack.Models;
 using GeminiBack.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Mscc.GenerativeAI;
 
 namespace GeminiBack.Controllers;
 
@@ -38,6 +39,20 @@ public class GeminiController : ControllerBase
     [HttpPost("basicPromptStream")]
     public async Task<IActionResult> BasicPromptStream(BasicPromptDto promptDto)
     {
-        return Ok("Hola mundo como stream");
+        var validationsResult = await _validatorPrompt.ValidateAsync(promptDto);
+        if (!validationsResult.IsValid)
+        {
+            throw new ArgumentException("El prompt no puede estar vacio");
+        }
+        
+        Response.ContentType = "text/plain; charset=utf-8";
+
+        await foreach (var response in _geminiService.BasicPromptStream(promptDto))
+        {
+            await Response.WriteAsync(response);
+            await Response.Body.FlushAsync();
+        }
+
+        return new EmptyResult();
     }
 }
