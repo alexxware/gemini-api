@@ -24,16 +24,16 @@ public class GeminiController : ControllerBase
     }
 
     [HttpPost("basicPrompt")]
-    public async Task<IActionResult> BasicPrompt(BasicPromptDto promptDto)
+    public async Task<string> BasicPrompt(BasicPromptDto promptDto)
     {
         var validationsResult = await _validatorPrompt.ValidateAsync(promptDto);
         if (!validationsResult.IsValid)
         {
-            return BadRequest(validationsResult.Errors);
+            return string.Empty;
         }
         
         var res = _geminiService.BasicPrompt(promptDto).Result;
-        return Ok(res);
+        return res;
     }
 
     [HttpPost("basicPromptStream")]
