@@ -30,4 +30,9 @@ public class GeminiService: IGeminiService
             yield return response;
         }
     }
+
+    public Task<string> AdvancedPrompt(string prompt, List<IFormFile?> files)
+    {
+        throw new NotImplementedException();
+    }
 }

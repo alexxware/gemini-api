@@ -17,7 +17,6 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 // Add services to the container.
-
 builder.Services.AddControllers()
     .AddJsonOptions(option =>
     {

@@ -55,4 +55,15 @@ public class GeminiController : ControllerBase
 
         return new EmptyResult();
     }
+
+    [HttpPost("advancedPrompt")]
+    public async Task<IActionResult> AdvancedPrompt([FromForm] string prompt, List<IFormFile?> files)
+    {
+        if(string.IsNullOrEmpty(prompt)) return BadRequest("El prompt no puede estar vacio");
+        
+        Response.ContentType = "text/plain; charset=utf-8";
+        
+        
+        return Ok();
+    }
 }

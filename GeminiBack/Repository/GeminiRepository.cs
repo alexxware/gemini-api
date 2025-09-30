@@ -18,10 +18,17 @@ public class GeminiRepository: IGeminiRepository
     {
         var googleApi = new GoogleAI(apiKey: _apiKey);
         var model = googleApi.GenerativeModel(model: Model.Gemini25Flash);
-        
+
         //generamos el contenido
         var response = await model.GenerateContent(promptDto.Prompt);
         
         return response.Text!;
+    }
+
+    public async Task<string> AdvancedPrompt(string prompt, List<IFormFile?> files)
+    {
+        var googleApi = new GoogleAI(apiKey: _apiKey);
+        var model = googleApi.GenerativeModel(model: Model.Gemini25Flash);
+        return "ok";
     }
 }
