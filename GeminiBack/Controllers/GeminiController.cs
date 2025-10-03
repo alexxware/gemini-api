@@ -57,13 +57,26 @@ public class GeminiController : ControllerBase
     }
 
     [HttpPost("advancedPrompt")]
-    public async Task<IActionResult> AdvancedPrompt([FromForm] string prompt, List<IFormFile?> files)
+    public async Task<IActionResult> AdvancedPrompt([FromForm] AdvancedPromptDto promptDto)
     {
-        if(string.IsNullOrEmpty(prompt)) return BadRequest("El prompt no puede estar vacio");
+        if(string.IsNullOrEmpty(promptDto.prompt)) return BadRequest("El prompt no puede estar vacio");
         
         Response.ContentType = "text/plain; charset=utf-8";
         
+        foreach (var file in promptDto.files)
+        {
+            // Ejemplo: console.log en el servidor para ver que llegan
+            Console.WriteLine($"Received file: {file.FileName} with size {file.Length} bytes.");
         
-        return Ok();
+            // Aquí podrías guardar el archivo, como hicimos con los productos.
+            // O procesar la imagen/archivo en memoria.
+        }
+        
+        return Ok(new 
+        {
+            Message = "Prompt recibido exitosamente y archivos procesados.",
+            Prompt = promptDto.prompt,
+            FilesReceived = promptDto.files.Count
+        });
     }
 }
