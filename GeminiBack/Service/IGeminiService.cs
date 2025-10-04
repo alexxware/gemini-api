@@ -8,5 +8,5 @@ public interface IGeminiService
 {
     Task<string> BasicPrompt(BasicPromptDto promptDto);
     IAsyncEnumerable<string> BasicPromptStream(BasicPromptDto promptDto);
-    Task<string> AdvancedPrompt(string prompt, List<IFormFile?> files);
+    Task<string> AdvancedPrompt(AdvancedPromptDto promptDto);
 }

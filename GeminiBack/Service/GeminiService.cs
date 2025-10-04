@@ -31,7 +31,7 @@ public class GeminiService: IGeminiService
         }
     }
 
-    public Task<string> AdvancedPrompt(string prompt, List<IFormFile?> files)
+    public Task<string> AdvancedPrompt(AdvancedPromptDto promptDto)
     {
         throw new NotImplementedException();
     }

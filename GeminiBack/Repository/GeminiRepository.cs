@@ -25,10 +25,38 @@ public class GeminiRepository: IGeminiRepository
         return response.Text!;
     }
 
-    public async Task<string> AdvancedPrompt(string prompt, List<IFormFile?> files)
+    public async Task<string> AdvancedPrompt(AdvancedPromptDto promptDto)
     {
-        var googleApi = new GoogleAI(apiKey: _apiKey);
-        var model = googleApi.GenerativeModel(model: Model.Gemini25Flash);
+        var googleAi = new GoogleAI(apiKey: _apiKey);
+        var model = googleAi.GenerativeModel(model: Model.Gemini25Flash);
+        
+        var parts = new List<Part>();
+        if (promptDto.files.Any())
+        {
+            foreach (var file in promptDto.files)
+            {
+                // Convertir IFormFile a byte[]
+                byte[] fileBytes;
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    fileBytes = stream.ToArray();
+                }
+
+                var inlineData = new InlineData
+                {
+                    Data = Convert.ToBase64String(fileBytes),
+                    MimeType = file.ContentType
+                };
+
+                var filePart = new Part { InlineData = inlineData };
+
+                parts.Add(filePart);
+            }
+        }
+        
+        //parts.Add(Part.FromText(promptDto.prompt));
+
         return "ok";
     }
 }
